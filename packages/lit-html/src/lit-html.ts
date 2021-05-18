@@ -751,7 +751,7 @@ function resolveDirective(
  * An updateable instance of a Template. Holds references to the Parts used to
  * update the template instance.
  */
-class TemplateInstance {
+export class TemplateInstance {
   /** @internal */
   _$template: Template;
   /** @internal */
@@ -1324,6 +1324,7 @@ class AttributePart {
         }
         value = this._sanitizer(value ?? '');
       }
+      console.log('COMMITTING ATTRIBUTE ', this.name);
       (wrap(this.element) as Element).setAttribute(
         this.name,
         (value ?? '') as string
