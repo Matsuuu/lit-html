@@ -14,13 +14,17 @@ suite('attr', () => {
     container = document.createElement('div');
   });
 
+  const titleAttr = 'div-title';
+  const selected = true;
+  const role = 'button-role';
+  let incremented = 0;
+  const onClick = () => {
+    incremented += 1;
+  };
+
   function renderAttributeTemplate() {
-    const selected = true;
-    const onClick = () => console.log('click');
-    const role = 'button-role';
-    const titleAttr = 'div-title';
     render(
-      html`<div ?disabled=${true} ?checked=${true} title=${titleAttr} type="button" ${attr`?selected=${selected} @click=${onClick} class="foobar" aria-label="button" role=${role}`}></div>`,
+      html`<div ?disabled=${true} title=${titleAttr} type="button" ${attr`?selected=${selected} @click=${onClick} class="foobar" role=${role}`}></div>`,
       container
     );
   }
@@ -28,7 +32,19 @@ suite('attr', () => {
   test('sets attr on element', () => {
     renderAttributeTemplate();
     const div = container.firstElementChild;
+
+    (div as HTMLDivElement).click();
     console.log(div);
-    assert.equal(div, div);
+
+    // Normal attributes
+    assert.isOk(div?.hasAttribute('disabled'));
+    assert.equal(div?.getAttribute('title'), titleAttr);
+    assert.equal(div?.getAttribute('type'), 'button');
+
+    // Directive attributes
+    assert.isOk(div?.hasAttribute('disabled'));
+    assert.equal(div?.getAttribute('class'), 'foobar');
+    assert.equal(div?.getAttribute('role'), role);
+    assert.equal(incremented, 1);
   });
 });

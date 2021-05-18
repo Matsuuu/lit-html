@@ -1324,7 +1324,6 @@ class AttributePart {
         }
         value = this._sanitizer(value ?? '');
       }
-      console.log('COMMITTING ATTRIBUTE ', this.name);
       (wrap(this.element) as Element).setAttribute(
         this.name,
         (value ?? '') as string

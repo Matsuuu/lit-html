@@ -1,12 +1,5 @@
 import {AsyncDirective, directive} from '../async-directive.js';
-import {
-  _Σ as p,
-  ElementPart,
-  noChange,
-  nothing,
-  TemplateInstance,
-  AttributePart,
-} from '../lit-html.js';
+import {_Σ as p, ElementPart, AttributePart, nothing} from '../lit-html.js';
 
 interface AttributeDirectiveBinding {
   name: string;
@@ -29,22 +22,19 @@ class AttributeDirective extends AsyncDirective {
     if (!this._initialized) {
       this._initialized = true;
       this.mapAttributes(attributes, part);
-      return this.render();
+      return nothing;
     }
 
-    return noChange;
+    return nothing;
   }
 
   mapAttributes(attributes: any, part: ElementPart) {
     const elem = part.element;
 
     const attributeList = this.parseAttributes(attributes);
-    const values = attributes.splice(1);
+    const values = attributes.slice(1);
     const attributeValueMap = this.getAttributeValueMap(attributeList, values);
 
-    const partsArray = (this._$parent._$parent as TemplateInstance)._parts;
-
-    console.log(this);
     Object.values(attributeValueMap).forEach(
       (val: AttributeDirectiveBinding) => {
         const part: AttributePart = new val.creator(
@@ -55,9 +45,7 @@ class AttributeDirective extends AsyncDirective {
           undefined
         );
 
-        part._$setValue(val.value, this._$parent, partsArray.length);
-
-        partsArray.push(part);
+        part._$setValue(val.value, this._$parent);
       }
     );
   }
